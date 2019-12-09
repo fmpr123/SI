@@ -5,6 +5,8 @@ R2-192.168.2.1 | 10.1.1.1
 R3-192.168.3.1 | 10.2.2.2
 
 R1(config)# license boot module c1900 technology-package securityk9
+write
+reload
 
 R1(config)# access-list 110 permit ip 192.168.1.0 0.0.0.255 192.168.3.0 0.0.0.255
 (Define o trafego do R1 ao R3 como interesting para que quando isto aconteça o
@@ -20,6 +22,7 @@ R1(config)# crypto isakmp key vpnpa55 address 10.2.2.2
 R1(config)# crypto ipsec transform-set VPN-SET esp-aes esp-sha-hmac
 
 R1(config)# crypto map VPN-MAP 10 ipsec-isakmp
+(pode dar erro, fazer exit e tentar de novo)
 R1(config-crypto-map)# description VPN connection to R3
 R1(config-crypto-map)# set peer 10.2.2.2
 R1(config-crypto-map)# set transform-set VPN-SET
@@ -28,8 +31,13 @@ R1(config-crypto-map)# exit
 
 R1(config)# interface s0/0/0
 R1(config-if)# crypto map VPN-MAP
+write
+reload
+login
 
 R3(config)# license boot module c1900 technology-package securityk9
+write
+reload
 
 R3(config)# access-list 110 permit ip 192.168.3.0 0.0.0.255 192.168.1.0 0.0.0.255
 
@@ -43,6 +51,7 @@ R3(config)# crypto isakmp key vpnpa55 address 10.1.1.2
 R3(config)# crypto ipsec transform-set VPN-SET esp-aes esp-sha-hmac
 
 R3(config)# crypto map VPN-MAP 10 ipsec-isakmp
+(pode dar erro, fazer exit e tentar de novo)
 R3(config-crypto-map)# description VPN connection to R1
 R3(config-crypto-map)# set peer 10.1.1.2
 R3(config-crypto-map)# set transform-set VPN-SET
@@ -51,3 +60,6 @@ R3(config-crypto-map)# exit
 
 R3(config)# interface s0/0/1
 R3(config-if)# crypto map VPN-MAP
+write
+reload
+login
