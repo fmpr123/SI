@@ -37,20 +37,27 @@ R1(config)# access-list 1 permit host 192.4.1.1
 R1(config)# line vty 0 4
 R1(config-line)# access-class 1 in
 
-etapa 9: ficha 13 DON'T USE
-https://gyazo.com/cd5e34906d7b25e1471fbe4a8c932a30
+etapa 9: ficha 13
+https://gyazo.com/a851231b03c97272d68733e751ff9120
+
+etapa 10: ficha 13
+R1(config)# aaa new-model
 R1(config)# aaa authentication login default group radius local
 R1(config)# radius-server host 172.16.1.1 auth-port 1645
 R1(config)# radius-server key cisco12345
 R1(config)# line vty 0 4
-R1(config-line)# access-class 2 in
+R1(config-line)# access-class 1 in
 R1(config-line)# login authentication default
 R1(config-line)# transport input ssh
-R1(config-line)# exit
-R1(config)# access-list 2 permit host 192.4.1.0 0.0.0.255
-R1(config)# access-list 2 deny all
 
-etapa 10: ficha 13
+R3(config)# aaa new-model
+R3(config)# aaa authentication login default group radius local
+R3(config)# radius-server host 172.16.1.1 auth-port 1645
+R3(config)# radius-server key cisco12345
+R3(config)# line vty 0 4
+R3(config-line)# access-class 1 in
+R3(config-line)# login authentication default
+R3(config-line)# transport input ssh
 
 etapa 11: ficha 7(resoluçao)
 
