@@ -1,0 +1,39 @@
+n vem programação
+
+- 3 faces do cubo
+- 3 pilhares de segurança de informação
+	confencialidade, integridade, informação <?
+
+- o que sao ameaças, vunerabiliadde, risco
+- quais os tipos de familias de ataques (reconhecimento, deniel of service) n é preciso explicar o ataque em especifico
+- o que é um ataque de reconhecimento, de acesso, de malware/trojan (familias de ataque)
+- o que consiste uma politica de segurança
+
+- o que é um modelo AAA baseado
+- vantagens do modelo AAA
+- porquê registar/autenticar utilizadores
+
+- tipos de firewalls
+- falar das geracoes
+- differença entre ACLS
+- utilizade das ACLS
+- zone based firewalls, o que é/ o que permite
+- o que é ids / ips e quando se usa
+- vantagens / desvantagens de soluções de segurança
+- o que é uma solução de segurança
+
+- criptografia simetrica e asimetrica (diferença/o que é)
+- tipos de criptografia
+- como conseguir autenticação/integridade atravez de criptografia
+- para que ser diffen-hellman (DH5+), importancia
+- o que é boa pratica em termos de segurança à rede
+	implementar autenticação, desativar predefenições, etc
+
+- indicar 5 praticas de programação segura
+	incriptação de dados, verificar input do user
+
+(Não sao muito aprofundadas as pergutnas)
+
+- perguntas básicas sobre VPNS?
+
+* fazer resumos sobre os temas mencionados anteriormente *

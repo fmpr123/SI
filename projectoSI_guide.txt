@@ -54,8 +54,6 @@ etapa 10: ficha 13
 
 etapa 11: ficha 7(resoluçao)
 
-AFONSO A PARTIR DAQUI
-
 etapa 12: ficha 9
 R1(config)# zone security INTERNET
 R1(config)# zone security DMZ
@@ -74,9 +72,13 @@ R1(config-cmap)# match protocol dns
 R1(config)# policy-map type inspect INSIDE_TO_INTERNET
 R1(config-pmap)# class type inspect INSIDE_PROTOCOLS
 R1(config-pmap-c)# inspect
+exit
+exit
 R1(config)# policy-map type inspect DMZ_TO_INTERNET
 R1(config-pmap)# class type inspect DMZ_PROTOCOLS
 R1(config-pmap-c)# inspect
+exit
+exit
 
 R1(config)# zone-pair security INSIDE_TO_INTERNET source INSIDE destination INTERNET
 R1(config-sec-zone-pair)# service-policy type inspect INSIDE_TO_INTERNET
@@ -143,6 +145,13 @@ R6(config-crypto-map)# exit
 
 R6(config)# interface s0/0/1
 R6(config-if)# crypto map VPN-MAP
+
+Verification:
+Pingar entre essa rede
+R4#show crypto ipsec sa
+R6#show crypto ipsec sa
+Deverá mostrar pacotes encápsulados:
+https://gyazo.com/9a8d1847ef1f7efd1ef507ac1578fcfd
 
 etapa 15: ficha 12(automated security features?)
 
