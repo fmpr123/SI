@@ -1,7 +1,6 @@
 VPN SETUP
 
 R1-192.168.1.1 | 10.1.1.2
-R2-192.168.2.1 | 10.1.1.1
 R3-192.168.3.1 | 10.2.2.2
 
 R1(config)# license boot module c1900 technology-package securityk9

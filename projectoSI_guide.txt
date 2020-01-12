@@ -1,0 +1,148 @@
+user: admin
+pass: mypwd
+
+Loopback0:
+R2(config)#interface loopback0
+R2(config-if)#ip address 62.48.16.12 255.255.255.0
+
+etapa 2:
+R1(config)# banner motd #*Bem-Vindo*#
+
+etapa 5:
+R1(config)# security passwords min-length 10
+
+etapa6:
+R1(config)# enable secret cisco12345
+
+etapa 7: ficha 12
+R1(config)# username admin privilege 15 secret mypwd
+R1(config)# line vty 0 4
+R1(config-line)# privilege level 15
+R1(config-line)# login local
+R1(config-line)# transport input ssh
+R1(config-line)# exit
+R1(config)# ip domain-name ccnasecurity.com
+R1(config)# crypto key generate rsa general-keys modulus 1024
+R1(config)# ip ssh version 2
+R1(config)# ip ssh time-out 90
+R1(config)# ip ssh authentication-retries 2
+R1(config)# exit
+
+Verificação:
+R1# show ip ssh
+PC-A - Desktop - Telnet/SSH Client - 192.4.1.2 - admin - mypwd
+
+etapa 8: ficha 12
+R1(config)# access-list 1 permit host 192.4.1.1
+R1(config)# line vty 0 4
+R1(config-line)# access-class 1 in
+
+etapa 9: ficha 13 DON'T USE
+https://gyazo.com/cd5e34906d7b25e1471fbe4a8c932a30
+R1(config)# aaa authentication login default group radius local
+R1(config)# radius-server host 172.16.1.1 auth-port 1645
+R1(config)# radius-server key cisco12345
+R1(config)# line vty 0 4
+R1(config-line)# access-class 2 in
+R1(config-line)# login authentication default
+R1(config-line)# transport input ssh
+R1(config-line)# exit
+R1(config)# access-list 2 permit host 192.4.1.0 0.0.0.255
+R1(config)# access-list 2 deny all
+
+etapa 10: ficha 13
+
+etapa 11: ficha 7(resoluçao)
+
+AFONSO A PARTIR DAQUI
+
+etapa 12: ficha 9
+R1(config)# zone security INTERNET
+R1(config)# zone security DMZ
+R1(config)# zone security INSIDE
+
+R1(config)# class-map type inspect match-any INSIDE_PROTOCOLS
+R1(config-cmap)# match protocol tcp
+R1(config-cmap)# match protocol udp
+R1(config-cmap)# match protocol icmp
+
+R1(config)# class-map type inspect match-any DMZ_PROTOCOLS
+R1(config-cmap)# match protocol http
+R1(config-cmap)# match protocol https
+R1(config-cmap)# match protocol dns
+
+R1(config)# policy-map type inspect INSIDE_TO_INTERNET
+R1(config-pmap)# class type inspect INSIDE_PROTOCOLS
+R1(config-pmap-c)# inspect
+R1(config)# policy-map type inspect DMZ_TO_INTERNET
+R1(config-pmap)# class type inspect DMZ_PROTOCOLS
+R1(config-pmap-c)# inspect
+
+R1(config)# zone-pair security INSIDE_TO_INTERNET source INSIDE destination INTERNET
+R1(config-sec-zone-pair)# service-policy type inspect INSIDE_TO_INTERNET
+
+R1(config)# zone-pair security DMZ_TO_INTERNET source DMZ destination INTERNET
+R1(config-sec-zone-pair)# service-policy type inspect DMZ_TO_INTERNET
+
+R1(config)# interface fa0/0
+R1(config-if)# zone-member security DMZ
+R1(config)# interface fa0/1
+R1(config-if)# zone-member security INSIDE
+R1(config)# interface s0/0/1
+R1(config-if)# zone-member security INTERNET
+
+etapa 13: ficha 10
+
+etapa 14: ficha 11
+
+R4-192.4.3.0 | 10.4.4.2
+R6-192.4.4.0 | 10.5.5.2
+
+R4(config)# access-list 110 permit ip 192.4.3.0 0.0.0.255 192.4.4.0 0.0.0.255
+(Define o trafego do R4 ao R6 como interesting para que quando isto aconteça o
+IPsec VPN seja ativado)
+
+R4(config)# crypto isakmp policy 10
+R4(config-isakmp)# encryption aes 256
+R4(config-isakmp)# authentication pre-share
+R4(config-isakmp)# group 5
+R4(config-isakmp)# exit
+R4(config)# crypto isakmp key vpnpa55 address 10.5.5.2
+
+R4(config)# crypto ipsec transform-set VPN-SET esp-aes esp-sha-hmac
+
+R4(config)# crypto map VPN-MAP 10 ipsec-isakmp
+(pode dar erro, fazer exit e tentar de novo)
+R4(config-crypto-map)# description VPN connection to R6
+R4(config-crypto-map)# set peer 10.5.5.2
+R4(config-crypto-map)# set transform-set VPN-SET
+R4(config-crypto-map)# match address 110
+R4(config-crypto-map)# exit
+
+R4(config)# interface s0/0/0
+R4(config-if)# crypto map VPN-MAP
+
+R6(config)# access-list 110 permit ip 192.4.4.0 0.0.0.255 192.4.3.0 0.0.0.255
+
+R6(config)# crypto isakmp policy 10
+R6(config-isakmp)# encryption aes 256
+R6(config-isakmp)# authentication pre-share
+R6(config-isakmp)# group 5
+R6(config-isakmp)# exit
+R6(config)# crypto isakmp key vpnpa55 address 10.4.4.2
+
+R6(config)# crypto ipsec transform-set VPN-SET esp-aes esp-sha-hmac
+
+R6(config)# crypto map VPN-MAP 10 ipsec-isakmp
+(pode dar erro, fazer exit e tentar de novo)
+R6(config-crypto-map)# description VPN connection to R4
+R6(config-crypto-map)# set peer 10.4.4.2
+R6(config-crypto-map)# set transform-set VPN-SET
+R6(config-crypto-map)# match address 110
+R6(config-crypto-map)# exit
+
+R6(config)# interface s0/0/1
+R6(config-if)# crypto map VPN-MAP
+
+etapa 15: ficha 12(automated security features?)
+
