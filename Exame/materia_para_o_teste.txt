@@ -1,5 +1,3 @@
-n vem programação
-
 - 3 faces do cubo
 - 3 pilhares de segurança de informação
 	confencialidade, integridade, informação <?
